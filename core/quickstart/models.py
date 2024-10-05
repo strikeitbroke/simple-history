@@ -8,7 +8,7 @@ class Author(models.Model):
         db_table = "author"
     name = models.CharField(max_length=100)
     bio = models.TextField(blank=True)
-    history = HistoricalRecords()
+    history = HistoricalRecords(table_name="author_history")
 
 
     def __str__(self):
@@ -21,7 +21,7 @@ class Article(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
     authors = models.ManyToManyField(Author, related_name='articles')  # Many-to-Many with Author
-    history = HistoricalRecords(m2m_fields=[authors])
+    history = HistoricalRecords(table_name="article_history", m2m_fields=[authors])
 
     def __str__(self):
         return self.title
@@ -32,7 +32,7 @@ class Comment(models.Model):
         db_table = "comment"
     article = HistoricForeignKey(Article, related_name='comments', on_delete=models.CASCADE)  # One-to-Many
     text = models.TextField()
-    history = HistoricalRecords()
+    history = HistoricalRecords(table_name="comment_history")
 
     def __str__(self):
         return self.text
